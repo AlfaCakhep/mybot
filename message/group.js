@@ -35,10 +35,23 @@ module.exports = welcome = async (ikyy, anu) => {
             	num = anu.participants[0]
                 let v = ikyy.contacts[num] || { notify: num.replace(/@.+/, '') }
                 anu_user = v.vname || v.notify || num.split('@')[0]
-                teks = `Halo ${anu_user} \n\nNama : \nUmur :\nGender : \nAsal :\n\nSemoga Betah dan jangan lupa isi`
-	            buff = await getBuffer(`https://api.lolhuman.xyz/api/base/welcome?apikey=${setting.lolkey}&img1=${pp_user}&img2=${pp_grup}&background=https://telegra.ph/file/559d40a73f54e257b0b2e.jpg&username=${encodeURI(anu_user)}&member=${memeg}&groupname= ${encodeURI(mdata.subject)}`)
-		        ikyy.sendMessage(mdata.id, buff, MessageType.image, {caption: teks, contextInfo: {"mentionedJid": [num]}})
-		}
+                teks = `Welcome @${num.split('@')[0]} 👋`
+	            buff = await getBuffer(`http://hadi-api.herokuapp.com/api/card/welcome?nama=${anu_user}&descriminator=${memeg}&memcount=${memeg}&gcname=${encodeURI(mdata.subject)}&pp=${pp_user}&bg=https://i.postimg.cc/LspSPBP1/IMG-20210809-180955.jpg`)
+                
+               buttons = [{buttonId: '!sewabot',buttonText:{displayText: 'SEWABOT'},type:1},{buttonId: '!menu',buttonText:{displayText: 'LIST MENU'},type:1}]
+
+               imageMsg = (await ikyy.prepareMessageMedia((buff), 'imageMessage', {thumbnail: buff})).imageMessage
+
+               buttonsMessage = {
+               contentText: `${teks}`,
+               footerText: 'Made With By AlfaaGanzz👑', imageMessage: imageMsg,
+               buttons: buttons,
+               headerType: 4
+}
+
+          prep = await ikyy.prepareMessageFromContent(mdata.id,{buttonsMessage},{contextInfo: {mentionedJid: [num], externalAdReply: { title: `Welcome ${anu_user} 👋\nSemoga betah ya kak :)`, body: `Jangan Lupa Baca Desk`, previewType: "PHOTO", thumbnailUrl: 'https://i.postimg.cc/fTz1xYcS/IMG-20210825-WA0907.jpg', sourceUrl: 'https://instagram.com/alfrp29_' }}})
+               ikyy.relayWAMessage(prep)
+            }
             if (anu.action == 'remove' && !mem.includes(ikyy.user.jid)) {
             if (!welkom.includes(anu.jid)) return
                 mdata = await ikyy.groupMetadata(anu.jid)
@@ -46,9 +59,22 @@ module.exports = welcome = async (ikyy, anu) => {
                 let w = ikyy.contacts[num] || { notify: num.replace(/@.+/, '') }
                 anu_user = w.vname || w.notify || num.split('@')[0]
                 memeg = mdata.participants.length
-                out = `Kenapa tuh? kok bisa keluar? \nSayonara ${anu_user} we will miss you`
-                buff = await getBuffer(`https://api.lolhuman.xyz/api/base/leave?apikey=${setting.lolkey}&img1=${pp_user}&img2=${pp_grup}&background=https://telegra.ph/file/559d40a73f54e257b0b2e.jpg&username=${encodeURI(anu_user)}&member=${memeg}&groupname= ${encodeURI(mdata.subject)}`)
-                ikyy.sendMessage(mdata.id, buff, MessageType.image, {caption: out, contextInfo: {"mentionedJid": [num]}})
+                out = `Good bye @${num.split('@')[0]} 👋`
+                buff = await getBuffer(`http://hadi-api.herokuapp.com/api/card/goodbye?nama=${anu_user}&descriminator=${memeg}&memcount=${memeg}&gcname=${encodeURI(mdata.subject)}&pp=${pp_user}&bg=https://i.postimg.cc/LspSPBP1/IMG-20210809-180955.jpg`)
+                
+               buttons = [{buttonId: '!bay',buttonText:{displayText: 'GOODBYE 😘🐒'},type:1}]
+
+               imageMsg = (await ikyy.prepareMessageMedia((buff), 'imageMessage', {thumbnail: buff})).imageMessage
+
+               buttonsMessage = {
+               contentText: `${out}`,
+               footerText: 'Made With By AlfaaGanzz👑', imageMessage: imageMsg,
+               buttons: buttons,
+               headerType: 4
+}
+
+          prep = await ikyy.prepareMessageFromContent(mdata.id,{buttonsMessage},{contextInfo: {mentionedJid: [num], externalAdReply: { title: `Goodbye ${anu_user} 👋\nJasamu akan di kubur dalam²`, body: `Dasar Beban Group`, previewType: "PHOTO", thumbnailUrl: 'https://i.postimg.cc/fTz1xYcS/IMG-20210825-WA0907.jpg', sourceUrl: 'https://instagram.com/alfrp29_' }}})
+               ikyy.relayWAMessage(prep)
             }
 		} catch (e) {
 			console.log('Error : %s', color(e, 'red'))
